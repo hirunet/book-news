@@ -1,11 +1,27 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="ja">
+<%- include('head.ejs') %>
+
+<body>
+  <%- include('nav.ejs') %>
+  <div class="container">
+    <% for (book of books) { %>
+    <div class="card m-2">
+      <div class="card-body">
+        <h5 class="card-title"><%= book.title %></h5>
+        <p class="card-text">ISBN: <%= book.isbn %></p>
+        <p class="card-text"><%= book.author %>, <%= book.publisher %>, <%= book.pubdate %></p>
+        <% if (book.cover != '') { %>
+        <p><img src="<%= book.cover %>" class="img-thumbnail" alt="<%= book.title %>"></p>
+        <% } else { %>
+        <p><img src="/image/noimage.jpg" class="img-thumbnail" alt="<%= book.title %>"></p>
+        <% } %>
+        <a href="#" class="btn btn-primary">Amazonで検索</a>
+      </div>
+    </div>
+    <% } %>
+  </div>
+  <div class="footer"></div>
+</body>
+
 </html>
