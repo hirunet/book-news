@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose()
 const express = require('express');
 const router = express.Router();
 
-const dbpath = '../book-crawler/database.sqlite3';
+const dbpath = './db/database.sqlite3';
 
 
 function searchBooks(req, res, next) {
@@ -33,10 +33,10 @@ function searchBooks(req, res, next) {
         if (req.query.ccode) {
           sql = sql + " AND";
         }
-        sql = sql + " title  LIKE '%" + req.query.title + "%'";
+        sql = sql + " json_extract(data_json, '$.summary.title') LIKE '%" + req.query.title + "%'";
       }
     }
-    sql = sql + " ORDER BY pubdate desc;";
+    sql = sql + " LIMIT 100;";
     console.log(sql);
 
     db.all(sql, (err, rows) => {

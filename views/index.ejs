@@ -6,17 +6,18 @@
   <%- include('nav.ejs') %>
   <div class="container">
     <% for (book of books) { %>
-    <div class="card m-2">
+    <% data = JSON.parse(book.data_json); %>
+    <div class="card m-2 shadow">
       <div class="card-body">
-        <h5 class="card-title"><%= book.title %></h5>
-        <p class="card-text">ISBN: <%= book.isbn %></p>
-        <p class="card-text"><%= book.author %>, <%= book.publisher %>, <%= book.pubdate %></p>
-        <% if (book.cover != '') { %>
-        <p><img src="<%= book.cover %>" class="img-thumbnail" alt="<%= book.title %>"></p>
+        <h5 class="card-title"><%= data.summary.title %></h5>
+        <p class="card-text">ISBN: <%= data.summary.isbn %></p>
+        <p class="card-text"><%= data.summary.author %>, <%= data.summary.publisher %>, <%= data.summary.pubdate %></p>
+        <p class="card-text"><%= JSON.stringify(data.summary) %></p>
+        <% if (data.summary.cover != '') { %>
+        <p><img src="<%= data.summary.cover %>" class="img-thumbnail" alt="<%= book.title %>"></p>
         <% } else { %>
         <p><img src="/images/noimage.jpg" class="img-thumbnail" alt="<%= book.title %>"></p>
         <% } %>
-        <a href="#" class="btn btn-primary">Amazonで検索</a>
       </div>
     </div>
     <% } %>
