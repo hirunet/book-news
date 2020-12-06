@@ -113,3 +113,12 @@ dist
 .vscode-test
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+
+# Python cache file
+__pycache__/
+
+# Database file
+*.sqlite3
+
+# VSCode workspace file
+*.code-workspace
