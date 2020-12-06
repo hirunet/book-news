@@ -1,0 +1,19 @@
+<div class="container">
+  <% for (book of books) { %>
+  <% data = JSON.parse(book.data_json); %>
+  <div class="card m-2 shadow">
+    <div class="card-body">
+      <h5 class="card-title"><a href="/book/<%= data.summary.isbn %>"><%= data.summary.title %></a></h5>
+      <p class="card-text">ISBN: <%= data.summary.isbn %></p>
+      <p class="card-text"><a href="/author/<%= data.summary.author %>"><%= data.summary.author %></a>,
+        <%= data.summary.publisher %>,
+        <%= data.summary.pubdate %></p>
+      <% if (data.summary.cover != '') { %>
+      <p><img src="<%= data.summary.cover %>" class="img-thumbnail" alt="<%= book.title %>"></p>
+      <% } else { %>
+      <p><img src="/images/noimage.jpg" class="img-thumbnail" alt="<%= book.title %>"></p>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
+</div>

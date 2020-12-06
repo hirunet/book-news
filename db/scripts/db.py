@@ -1,5 +1,3 @@
-import sys
-import os
 import sqlite3
 import json
 
@@ -38,20 +36,15 @@ def insert_book(book):
 
 
 def get_isbn_list():
-    isbn_list = set()
+    isbn_list = []
 
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
     cursor.execute('SELECT isbn FROM books;')
 
     for result in cursor:
-        isbn_list.add(result[0])
+        isbn_list.append(result[0])
 
     conn.close()
 
     return isbn_list
-
-
-if __name__ == '__main__':
-    isbn = sys.argv[1]
-    url = sys.argv[2]
