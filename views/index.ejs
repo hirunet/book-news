@@ -4,7 +4,14 @@
 
 <body>
   <%- include('nav.ejs') %>
-  <%- include('books.ejs', books) %>
+  <% switch (style) { 
+    case 'tile': %>
+  <%- include('books_tile.ejs', books) %>
+  <%  break; 
+    default: %>
+  <%- include('books_list.ejs', books) %>
+  <%  break;
+  } %>
   <%- include('footer.ejs') %>
 </body>
 

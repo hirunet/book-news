@@ -43,9 +43,13 @@ function searchBooks(req, res, next) {
       if (err) {
         console.error(err.messages);
       }
-      res.render("index", { books: rows });
+      if (req.query.style) {
+        style = req.query.style;
+      } else {
+        style = "list";
+      }
+      res.render("index", { books: rows, style: style });
     });
-
   });
 
   db.close((err) => {
