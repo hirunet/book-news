@@ -1,6 +1,12 @@
 CREATE TABLE books(
   isbn        INTEGER PRIMARY KEY,
   title       TEXT,
+  volume      TEXT,
+  series      TEXT,
+  publisher   TEXT,
+  pubdate     TEXT,
+  cover       TEXT,
+  author      TEXT,
   ccode       TEXT,
   genre       TEXT,
   keywords    TEXT,

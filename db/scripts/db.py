@@ -24,9 +24,15 @@ def insert_book(book):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
     cursor.execute(
-        'INSERT INTO books (isbn, title, ccode, genre, keywords, data_json) VALUES (?, ?, ?, ?, ?, ?);',
+        'INSERT INTO books (isbn, title, volume, series, publisher, pubdate, cover, author, ccode, genre, keywords, data_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
         (book['summary']['isbn'],
          book['summary']['title'],
+         book['summary']['volume'],
+         book['summary']['series'],
+         book['summary']['publisher'],
+         book['summary']['pubdate'],
+         book['summary']['cover'],
+         book['summary']['author'],
          ccode,
          genre,
          keywords,
