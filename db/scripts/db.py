@@ -43,7 +43,7 @@ def get_isbn_list():
     cursor.execute('SELECT isbn FROM books;')
 
     for result in cursor:
-        isbn_list.append(result[0])
+        isbn_list.append(str(result[0]))
 
     conn.close()
 

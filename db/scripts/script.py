@@ -47,7 +47,7 @@ if __name__ == '__main__':
         for book in tqdm(results):
             if not 'summary' in book:
                 continue
-            if int(book['summary']['isbn']) in known_isbn_list:
+            if book['summary']['isbn'] in known_isbn_list:
                 continue
             known_isbn_list.append(book['summary']['isbn'])
             db.insert_book(book)
