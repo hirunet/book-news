@@ -33,6 +33,7 @@ function searchBooks(req, res, next) {
       sql = sql + " AND ccode  LIKE '" + req.query.ccode + "'";
     }
 
+    sql = sql + " ORDER BY pubdate DESC";
     sql = sql + " LIMIT 100;";
     console.log(sql);
 
