@@ -6,12 +6,6 @@ const dbpath = './db/database.sqlite3';
 
 
 function searchBooks(req, res, next) {
-  // TODO タイトル検索機能
-  if (req.query.title) {
-    console.log('title: ' + req.query.title);
-  }
-
-
   let db = new sqlite3.Database(dbpath, sqlite3.OPEN_READONLY, (err) => {
     if (err) {
       return console.error(err.message);
