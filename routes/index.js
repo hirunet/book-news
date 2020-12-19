@@ -16,20 +16,21 @@ function searchBooks(req, res, next) {
     const books = [];
 
     let sql = "SELECT * FROM books";
-    if (req.query.title || req.query.ccode) {
-      sql = sql + " WHERE";
-      if (req.query.ccode) {
-        console.log('ccode: ' + req.query.ccode)
-        sql = sql + " ccode  LIKE '" + req.query.ccode + "'";
-      }
-      if (req.query.title) {
-        console.log('title: ' + req.query.title)
-        if (req.query.ccode) {
-          sql = sql + " AND";
-        }
-        sql = sql + " json_extract(data_json, '$.summary.title') LIKE '%" + req.query.title + "%'";
-      }
+
+    // Filter by pubdate
+    // TODO
+    sql = sql + " WHERE '20201201' < pubdate AND pubdate < '20201220'";
+
+    // Filter by title
+    if (req.query.title) {
+      sql = sql + " AND title LIKE '%" + req.query.title + "%'";
     }
+
+    // Filter by ccode
+    if (req.query.ccode) {
+      sql = sql + " AND ccode  LIKE '" + req.query.ccode + "'";
+    }
+
     sql = sql + " LIMIT 100;";
     console.log(sql);
 
