@@ -34,7 +34,7 @@ function searchBooks(req, res, next) {
     }
 
     sql = sql + " ORDER BY pubdate DESC";
-    sql = sql + " LIMIT 100;";
+    sql = sql + " ;";
     console.log(sql);
 
     db.all(sql, (err, rows) => {
