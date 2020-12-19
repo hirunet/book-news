@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose()
 const express = require('express');
 const router = express.Router();
+const moment = require("moment");
 
 const dbpath = './db/database.sqlite3';
 
@@ -18,8 +19,9 @@ function searchBooks(req, res, next) {
     let sql = "SELECT * FROM books";
 
     // Filter by pubdate
-    // TODO
-    sql = sql + " WHERE '20201201' < pubdate AND pubdate < '20201220'";
+    const today = moment().format("YYYYMMDD");
+    const twoWeeksAgo = moment().add(-14, 'day').format("YYYYMMDD");
+    sql = `${sql} WHERE '${twoWeeksAgo}' < pubdate AND pubdate <= '${today}'`;
 
     // Filter by title
     if (req.query.title) {
