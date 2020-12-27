@@ -2,25 +2,32 @@
 <html lang="ja">
 <%- include('head.ejs') %>
 
-<body>
-  <%- include('nav.ejs') %>
-  <div class="container">
-    <% data = JSON.parse(book.data_json); %>
-    <div class="card m-2 shadow">
-      <div class="card-body">
-        <h5 class="card-title"><%= data.summary.title %></h5>
-        <p class="card-text">ISBN: <%= data.summary.isbn %></p>
-        <p class="card-text"><%= data.summary.author %>, <%= data.summary.publisher %>, <%= data.summary.pubdate %></p>
-        <% if (data.summary.cover != '') { %>
-        <p><img src="<%= data.summary.cover %>" class="img-thumbnail" alt="<%= book.title %>"></p>
-        <% } else { %>
-        <p><img src="/images/noimage.jpg" class="img-thumbnail" alt="<%= book.title %>"></p>
-        <% } %>
-        <p class="card-text"><%= JSON.stringify(data) %></p>
+  <body>
+    <%- include('nav.ejs') %>
+      <div class="container">
+        <% data=book.data_json; %>
+          <div class="card m-2 shadow">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= data.summary.title %>
+              </h5>
+              <p class="card-text">ISBN: <%= data.summary.isbn %>
+              </p>
+              <p class="card-text">
+                <%= data.summary.author %>, <%= data.summary.publisher %>, <%= data.summary.pubdate %>
+              </p>
+              <% if (data.summary.cover !='' ) { %>
+                <p><img src="<%= data.summary.cover %>" class="img-thumbnail" alt="<%= book.title %>"></p>
+                <% } else { %>
+                  <p><img src="/images/noimage.jpg" class="img-thumbnail" alt="<%= book.title %>"></p>
+                  <% } %>
+                    <p class="card-text">
+                      <%= JSON.stringify(data) %>
+                    </p>
+            </div>
+          </div>
       </div>
-    </div>
-  </div>
-  <%- include('footer.ejs') %>
-</body>
+      <%- include('footer.ejs') %>
+  </body>
 
 </html>

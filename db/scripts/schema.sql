@@ -1,21 +1,29 @@
 CREATE TABLE books(
-  isbn        INTEGER PRIMARY KEY,
+  isbn        BIGINT PRIMARY KEY,
   title       TEXT,
+  ccode       TEXT,
   volume      TEXT,
   series      TEXT,
   publisher   TEXT,
   pubdate     TEXT,
   cover       TEXT,
   author      TEXT,
-  ccode       TEXT,
   genre       TEXT,
   keywords    TEXT,
   data_json   JSON,
-  created_at  TEXT DEFAULT (DATETIME('now', 'localtime')),
-  updated_at  TEXT DEFAULT (DATETIME('now', 'localtime'))
+  created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TRIGGER trigger_books_updated_at AFTER UPDATE ON books
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
 BEGIN
-    UPDATE books SET updated_at = DATETIME('now', 'localtime') WHERE rowid == NEW.rowid;
+  NEW.updated_at = NOW();
+  RETURN NEW;
 END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_books_updated_at
+AFTER UPDATE ON books
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();

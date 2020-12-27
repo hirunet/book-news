@@ -1,60 +1,47 @@
-const sqlite3 = require('sqlite3').verbose()
+const { Client } = require('pg');
 const express = require('express');
 const router = express.Router();
 const moment = require("moment");
 
-const dbpath = './db/database.sqlite3';
+const database = process.env.DATABASE_URL;
 
-
-function searchBooks(req, res, next) {
-  let db = new sqlite3.Database(dbpath, sqlite3.OPEN_READONLY, (err) => {
-    if (err) {
-      return console.error(err.message);
-    }
+async function searchBooks(req, res, next) {
+  const client = new Client({
+    connectionString: database
   });
 
-  db.serialize(() => {
-    const books = [];
+  let query = 'SELECT * FROM books';
+  let params = [];
 
-    let sql = "SELECT * FROM books";
+  // Filter by pubdate
+  query += ' WHERE $1 < pubdate AND pubdate <= $2';
+  const twoWeeksAgo = moment().add(-14, 'day').format("YYYYMMDD");
+  const today = moment().format("YYYYMMDD");
+  params.push(twoWeeksAgo);
+  params.push(today);
 
-    // Filter by pubdate
-    const today = moment().format("YYYYMMDD");
-    const twoWeeksAgo = moment().add(-14, 'day').format("YYYYMMDD");
-    sql = `${sql} WHERE '${twoWeeksAgo}' < pubdate AND pubdate <= '${today}'`;
+  // Filter by title
+  if (req.query.title) {
+    query += ' AND title LIKE $3';
+    params.push('%' + req.query.title + '%');
+  }
+  // Filter by ccode
+  else if (req.query.ccode) {
+    query += ' AND ccode LIKE $3';
+    params.push('%' + req.query.ccode + '%');
+  }
 
-    // Filter by title
-    if (req.query.title) {
-      sql = sql + " AND title LIKE '%" + req.query.title + "%'";
-    }
+  query += ' ORDER BY pubdate DESC;';
 
-    // Filter by ccode
-    if (req.query.ccode) {
-      sql = sql + " AND ccode  LIKE '" + req.query.ccode + "'";
-    }
-
-    sql = sql + " ORDER BY pubdate DESC";
-    sql = sql + " ;";
-    console.log(sql);
-
-    db.all(sql, (err, rows) => {
-      if (err) {
-        console.error(err.messages);
-      }
-      if (req.query.style) {
-        style = req.query.style;
-      } else {
-        style = "list";
-      }
-      res.render("index", { books: rows, style: style });
-    });
-  });
-
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-  });
+  await client.connect();
+  const result = await client.query(query, params);
+  if (req.query.style) {
+    style = req.query.style;
+  } else {
+    style = "list";
+  }
+  res.render("index", { books: result.rows, style: style });
+  await client.end();
 }
 
 /* GET home page. */

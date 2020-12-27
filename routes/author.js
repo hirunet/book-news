@@ -1,42 +1,25 @@
-const sqlite3 = require('sqlite3').verbose()
+const { Client } = require('pg');
 const express = require('express');
 const router = express.Router();
 
-const dbpath = './db/database.sqlite3';
+const database = process.env.DATABASE_URL;
 
-
-function getAuthorBookList(req, res, next) {
-  let db = new sqlite3.Database(dbpath, sqlite3.OPEN_READONLY, (err) => {
-    if (err) {
-      return console.error(err.message);
-    }
+async function getAuthorBookList(req, res, next) {
+  const client = new Client({
+    connectionString: database
   });
 
-  db.serialize(() => {
-    const author = decodeURIComponent(req.params.name);
+  const name = req.params.name;
+  const query = 'SELECT * FROM books WHERE author = $1 ORDER BY pubdate DESC';
 
-    const sql = "SELECT * FROM books WHERE json_extract(data_json, '$.summary.author') = '" + author + "';";
-    console.log(sql);
+  await client.connect();
 
-    db.all(sql, (err, rows) => {
-      if (err) {
-        console.error(err.messages);
-      }
-      if (rows) {
-        res.render("index", { books: rows });
-      } else {
-        res.send("error");
-      }
-    });
+  const result = await client.query(query, [name,]);
+  res.render("index", { books: result.rows, style: 'style' });
 
-  });
-
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-  });
+  await client.end();
 }
+
 
 /* GET home page. */
 router.get('/author/:name', getAuthorBookList);

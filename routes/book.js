@@ -1,41 +1,23 @@
-const sqlite3 = require('sqlite3').verbose()
+const { Client } = require('pg');
 const express = require('express');
 const router = express.Router();
 
-const dbpath = './db/database.sqlite3';
+const database = process.env.DATABASE_URL;
 
-
-function getBook(req, res, next) {
-  let db = new sqlite3.Database(dbpath, sqlite3.OPEN_READONLY, (err) => {
-    if (err) {
-      return console.error(err.message);
-    }
+async function getBook(req, res, next) {
+  const client = new Client({
+    connectionString: database
   });
 
-  db.serialize(() => {
-    const isbn = req.params.isbn;
+  const isbn = req.params.isbn;
+  const query = 'SELECT * FROM books WHERE isbn = $1';
 
-    const sql = "SELECT * FROM books WHERE isbn = " + isbn + ";";
-    console.log(sql);
+  await client.connect();
 
-    db.all(sql, (err, rows) => {
-      if (err) {
-        console.error(err.messages);
-      }
-      if (rows) {
-        res.render("book", { book: rows[0] });
-      } else {
-        res.send("error " + isbn);
-      }
-    });
+  const result = await client.query(query, [isbn,]);
+  res.render("book", { book: result.rows[0] });
 
-  });
-
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-  });
+  await client.end();
 }
 
 /* GET home page. */

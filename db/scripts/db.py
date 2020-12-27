@@ -1,8 +1,6 @@
-import sqlite3
+import os
+import psycopg2
 import json
-
-
-DATABASE_NAME = '../database.sqlite3'
 
 
 def insert_book(book):
@@ -21,10 +19,10 @@ def insert_book(book):
             if identifier == "20":
                 keywords = subject['SubjectHeadingText']
 
-    conn = sqlite3.connect(DATABASE_NAME)
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cursor = conn.cursor()
     cursor.execute(
-        'INSERT INTO books (isbn, title, volume, series, publisher, pubdate, cover, author, ccode, genre, keywords, data_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
+        'INSERT INTO books (isbn, title, volume, series, publisher, pubdate, cover, author, ccode, genre, keywords, data_json) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);',
         (book['summary']['isbn'],
          book['summary']['title'],
          book['summary']['volume'],
@@ -44,7 +42,7 @@ def insert_book(book):
 def get_isbn_list():
     isbn_list = []
 
-    conn = sqlite3.connect(DATABASE_NAME)
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cursor = conn.cursor()
     cursor.execute('SELECT isbn FROM books;')
 
