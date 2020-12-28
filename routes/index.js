@@ -12,7 +12,6 @@ async function searchBooks(req, res, next) {
   res.render("index", { books: books, style: style });
 }
 
-/* GET home page. */
 router.get('/', searchBooks);
 
 module.exports = router;
