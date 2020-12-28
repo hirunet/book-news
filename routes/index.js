@@ -31,7 +31,7 @@ async function searchBooks(req, res, next) {
     params.push('%' + req.query.ccode + '%');
   }
 
-  query += ' ORDER BY pubdate DESC;';
+  query += ' ORDER BY pubdate DESC, isbn;';
 
   await client.connect();
   const result = await client.query(query, params);
