@@ -6,20 +6,23 @@
           <div class="card h-100 shadow">
             <% if (data.summary.cover !='' ) { %>
               <p><img src="<%= data.summary.cover %>" class="card-img-top" alt="<%= book.title %>"></p>
-              <% } else { %>
-                <p><img src="/images/noimage.jpg" class="card-img-top" alt="<%= book.title %>"></p>
-                <% } %>
-                  <div class="card-body">
-                    <p class="card-title"><a href="/book/<%= data.summary.isbn %>">
-                        <%= data.summary.title %>
-                      </a></p>
-                    <small class="card-text text-muted"><a href="/author/<%= data.summary.author %>">
-                        <%= data.summary.author %>
-                      </a>,
-                      <%= data.summary.publisher %>,
-                        <%= data.summary.pubdate %>
-                    </small>
-                  </div>
+            <% } else { %>
+              <p><img src="/images/noimage.jpg" class="card-img-top" alt="<%= book.title %>"></p>
+            <% } %>
+            <div class="card-body">
+              <p class="card-title">
+                <a href="/book/<%= data.summary.isbn %>">
+                  <%= data.summary.title %>
+                </a>
+              </p>
+              <small class="card-text text-muted">
+                <a href="/author/<%= data.summary.author %>">
+                  <%= data.summary.author %>
+                </a>,
+                <%= data.summary.publisher %>,
+                <%= data.summary.pubdate %>
+              </small>
+            </div>
           </div>
         </div>
         <% } %>
