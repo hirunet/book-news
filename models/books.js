@@ -3,7 +3,14 @@ const moment = require("moment");
 
 const database = process.env.DATABASE_URL;
 
-// DBから書籍を取得する
+/**
+ * DBから検索条件にあった書籍のリストを取得する
+ * @param {Object} query 検索条件
+ *    以下のプロパティを指定できる
+ *    - タイトル
+ *    - Cコード
+ * @return {Array.<Object>} books 取得した書籍のリスト
+ */
 async function getBooks(query) {
   const client = new Client({
     connectionString: database
@@ -42,7 +49,12 @@ async function getBooks(query) {
   return result.rows;
 }
 
-async function getBook(isbn) {
+/**
+ * DBから指定したISBNの書籍を取得する
+ * @param {number} isbn ISBN
+ * @return {Object} book 取得した書籍
+ */
+async function getBookByIsbn(isbn) {
   const client = new Client({
     connectionString: database
   });
@@ -56,6 +68,11 @@ async function getBook(isbn) {
   return result.rows[0];
 }
 
+/**
+ * DBから指定した著者名の書籍のリストを取得する
+ * @param {String} author 著者名
+ * @return {Array.<Object>} books 取得した書籍のリスト
+ */
 async function getBooksByAuthor(author) {
   const client = new Client({
     connectionString: database
@@ -71,5 +88,5 @@ async function getBooksByAuthor(author) {
 }
 
 exports.getBooks = getBooks;
-exports.getBook = getBook;
+exports.getBookByIsbn = getBookByIsbn;
 exports.getBooksByAuthor = getBooksByAuthor;
