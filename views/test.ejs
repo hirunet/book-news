@@ -68,48 +68,88 @@
         </div>
     </div>
     </nav>
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        今週の新刊
-      </h1>
-    </div>
-  </section>
-  <section>
-    <div class="container">
-        <% for (book of books) { %>
-            <% data=book.data_json; %>
-            <article class="media">
-                <figure class="media-left">
-                    <p class="image is-64x64">
-                        <img src="<%= data.summary.cover %>">
-                    </p>
-                </figure>
-                <div class="media-content">
-                    <div class="content">
-                    <p>
-                        <a href="/book/<%= data.summary.isbn %>">
-                            <%= data.summary.title %>
-                        </a>
-                        <small>
-                            <a href="/author/<%= data.summary.author %>">
-                                <%= data.summary.author %>
-                            </a>
-                        </small>
-                        <small>
-                            <%= data.summary.publisher %>
-                        </small>
-                        <small>
-                            <%= data.summary.pubdate %>
-                        </small>
-                        <br>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-                    </p>
+    <div class="columns">
+        <div class="column is-one-quarter">
+            <section class="section">
+                <div class="container">
+                    <div class="field">
+                        <label class="label">キーワード</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="タイトル、著者名など">
+                        </div>
+                        </div>
+
+                        <div class="field">
+                        <label class="label">カテゴリ</label>
+                        <div class="control">
+                            <div class="select">
+                            <select>
+                                <option>全て</option>
+                                <option>漫画</option>
+                                <option>自然科学</option>
+                            </select>
+                            </div>
+                        </div>
+                        </div>
+
+
+                        <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-link">検索</button>
+                        </div>
                     </div>
                 </div>
-            </article>
-        <% } %>
+            </section>
+        </div>
+        <div class="column">
+            <section class="section">
+                <div class="container">
+                <h1 class="title">
+                    今週の新刊
+                </h1>
+                </div>
+            </section>
+            <section class="section">
+                <div class="container">
+                    <% for (book of books) { %>
+                        <% data=book.data_json; %>
+                        <article class="media">
+                            <figure class="media-left">
+                                <p class="image is-64x64">
+                                    <a href="/book/<%= data.summary.isbn %>">
+                                        <img src="<%= data.summary.cover %>">
+                                    </a>
+                                </p>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                <p>
+                                    <a class="has-text-primary" href="/book/<%= data.summary.isbn %>">
+                                        <%= data.summary.title %>
+                                    </a>
+                                    <br>
+                                    <small>
+                                        <%= data.summary.author %>
+                                        <%= data.summary.publisher %>
+                                        <%= data.summary.pubdate %>
+                                    </small>
+                                    <br>
+                                    <small class="is-size-7">
+                                    <% if (book.text) { %>
+                                        <%= book.text %>
+                                    <% } else {%>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                                    <% } %>
+                                    </small>
+                                </p>
+                                </div>
+                            </div>
+                        </article>
+                    <% } %>
+                </div>
+            </section>
+        </div>
     </div>
-  </section>
+    
   </body>
 </html>
