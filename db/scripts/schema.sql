@@ -27,3 +27,5 @@ CREATE TRIGGER trigger_books_updated_at
 AFTER UPDATE ON books
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE INDEX ON books (title);
