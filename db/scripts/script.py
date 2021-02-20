@@ -37,6 +37,10 @@ def get_bibs(items):
 
 
 if __name__ == '__main__':
+#    db.delete_books()
+    twoWeeksAgo = datetime.date.today() - datetime.timedelta(weeks=2)
+    twoWeeksLater = datetime.date.today() + datetime.timedelta(weeks=2)
+
     printLog('書誌情報の収集開始')
     coverage = get_coverage()
     printLog('covrege: {}'.format(len(coverage)))
@@ -55,12 +59,39 @@ if __name__ == '__main__':
         results = get_bibs(isbn_list)
         printLog('get_bibs end')
         printLog('Adding books to database')
+
         for book in results:
+            if not book:
+                continue
             if not 'summary' in book:
                 continue
             if book['summary']['isbn'] in known_isbn_list:
                 continue
             known_isbn_list.append(book['summary']['isbn'])
+            if book['summary']['pubdate'] < twoWeeksAgo.strftime("%Y%m%d"):
+                continue
+            if twoWeeksLater.strftime("%Y%m%d") < book['summary']['pubdate']:
+                continue
+            if not 'Subject' in book['onix']['DescriptiveDetail']:
+                continue
+            ccode = ""
+            genre = ""
+            keywords = ""
+            subjects = book['onix']['DescriptiveDetail']['Subject']
+            for subject in subjects:
+                identifier = subject['SubjectSchemeIdentifier']
+                if identifier == "78":
+                    ccode = subject['SubjectCode']
+                if identifier == "79":
+                    genre = subject['SubjectCode']
+                if identifier == "20":
+                    keywords = subject['SubjectHeadingText']
+            if not ccode:
+                continue
+            
+            if ccode[1:] != '979':
+                continue
+            printLog('{} {} {}'.format(book['summary']['pubdate'], ccode, book['summary']['title']))
             db.insert_book(book)
 
         cnt = cnt + 1

@@ -3,6 +3,14 @@ import psycopg2
 import json
 
 
+def delete_books():
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM books;')
+    conn.commit()
+    conn.close()
+
+
 def insert_book(book):
     ccode = ""
     genre = ""
