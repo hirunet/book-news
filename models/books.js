@@ -9,7 +9,6 @@ const database = process.env.DATABASE_URL;
  *    以下のプロパティを指定できる
  *    - {String} title タイトル
  *    - {String} ccode Cコード
- *    TODO 以下を実装する
  *    - {String} fromDate 検索範囲の開始日時（デフォルトは二週間前）
  *    - {String} toDate   検索範囲の終了日時（デフォルトは当日）
  * @return {Array.<Object>} books 取得した書籍のリスト
@@ -24,13 +23,19 @@ async function getBooks(query) {
 
   // Filter by pubdate
   statement += " WHERE $1 < pubdate AND pubdate <= $2";
+
   let fromDate = moment().add(-14, "day").format("YYYYMMDD");
-  if (query.title) {
-    fromDate = moment().add(-1000, "day").format("YYYYMMDD");
+  if (query.fromDate) {
+    fromDate = query.fromDate;
   }
-  const today = moment().format("YYYYMMDD");
+
+  let toDate = moment().format("YYYYMMDD");
+  if (query.toDate) {
+    toDate = query.toDate;
+  }
+
   params.push(fromDate);
-  params.push(today);
+  params.push(toDate);
 
   // Filter by title
   if (query.title) {
