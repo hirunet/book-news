@@ -11,6 +11,8 @@ const database = process.env.DATABASE_URL;
  *    - {String} ccode Cコード
  *    - {String} fromDate 検索範囲の開始日時（デフォルトは二週間前）
  *    - {String} toDate   検索範囲の終了日時（デフォルトは当日）
+ *    - {String} limit    limit件まで取得する
+ *    - {String} offset   offset+1件目から取得する
  * @return {Array.<Object>} books 取得した書籍のリスト
  */
 async function getBooks(query) {
@@ -48,7 +50,11 @@ async function getBooks(query) {
     params.push("%" + query.ccode + "%");
   }
 
-  statement += " ORDER BY pubdate DESC, isbn;";
+  statement += " ORDER BY pubdate DESC, isbn LIMIT $4 OFFSET $5;";
+  const limit = query.limit || 30;
+  const offset = query.offset || 0;
+  params.push(limit);
+  params.push(offset);
 
   await client.connect();
   const result = await client.query(statement, params);
