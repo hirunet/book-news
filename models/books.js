@@ -1,7 +1,7 @@
 const { Client } = require("pg");
 const moment = require("moment");
 
-const database = process.env.DATABASE_URL2;
+const database = process.env.DATABASE_URL;
 
 /**
  * DBから検索条件にあった書籍のリストを取得する
