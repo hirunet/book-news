@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const booksModel = require("../models/books");
+const auth0 = require("../auth0");
 
 function sayHello(req, res, next) {
   res.send("Hello, world!");
@@ -28,5 +29,23 @@ async function getBook(req, res, next) {
 router.get("/", sayHello);
 router.get("/books", getBooks);
 router.get("/books/:isbn", getBook);
+
+router.get("/api/private", auth0.checkJwt, function (req, res) {
+  res.json({
+    message: "これは秘密のメッセージです",
+  });
+});
+
+router.get(
+  "/api/private-scoped",
+  auth0.checkJwt,
+  auth0.checkScopes,
+  function (req, res) {
+    res.json({
+      message:
+        "Hello from a private endpoint! You need to be authenticated and have a scope of read:messages to see this.",
+    });
+  }
+);
 
 module.exports = router;
