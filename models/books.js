@@ -24,7 +24,7 @@ async function getBooks(query) {
   let params = [];
 
   // Filter by pubdate
-  statement += " WHERE $1 < pubdate AND pubdate <= $2";
+  statement += " WHERE $1 <= pubdate AND pubdate <= $2";
 
   let fromDate = moment().add(-14, "day").format("YYYYMMDD");
   if (query.fromDate) {
@@ -51,7 +51,7 @@ async function getBooks(query) {
   }
 
   statement += " ORDER BY pubdate DESC, isbn LIMIT $4 OFFSET $5;";
-  const limit = query.limit || 30;
+  const limit = query.limit || 1000;
   const offset = query.offset || 0;
   params.push(limit);
   params.push(offset);
@@ -59,6 +59,7 @@ async function getBooks(query) {
   await client.connect();
   const result = await client.query(statement, params);
   await client.end();
+  console.log(result);
 
   return result.rows;
 }
