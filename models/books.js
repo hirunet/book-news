@@ -73,6 +73,7 @@ async function getBooks(query) {
 async function getBookByIsbn(isbn) {
   const client = new Client({
     connectionString: database,
+    ssl:true
   });
 
   let statement = "SELECT * FROM books WHERE isbn = $1;";
