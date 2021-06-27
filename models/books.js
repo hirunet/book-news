@@ -37,15 +37,6 @@ async function getBooks(query) {
     toDate = query.toDate;
   }
 
-# short memo
-hitokoto() {
-  LOG_FILE=~/hitokoto.log
-  if [ $# = 0 ]; then
-    cat $LOG_FILE
-  else
-    echo "[$(date '+%F %T')] $*" >> $LOG_FILE
-  fi
-}
   params.push(fromDate);
   params.push(toDate);
 
